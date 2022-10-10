@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>RobotWay</title>
+  </head>
+
+  <body>
+    <h1>Welcome to RobotWay</h1>
+  <form method="post" th:object="${coords}">
+
+    <div class = "coordinates" id = "coords">
+      <h3> Input Coordinates to Robot</h3>
+      <input th:text="x0" th:field = "*{x0}" type = "number"/>
+      <input th:text="y0" th:field = "*{y0}" type = "number"/>
+      <input th:text="x1" th:field = "*{x1}" type = "number"/>
+      <input th:text="y1" th:field = "*{y1}" type = "number"/>
+
+      <button> Submit your Coordinates </button>
+    </div>
+  </form>
+  </body>
+</html>

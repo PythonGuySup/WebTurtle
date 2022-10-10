@@ -1,0 +1,14 @@
+^ Y
+|
+|   ^
+|   |
+|___R_____> X
+
+
+public PositionPoint offset(int ox, int oy, short changeView) { return new PositionPoint(this.getX() + ox, this.getY() + oy, changeView, this);  }
+
+    public PositionPoint offsetY(int oy) { return new PositionPoint(this.getX(), this.getY() + oy, this.getView(), this);  }
+
+    public PositionPoint offsetX(int ox) { return new PositionPoint(this.getX() + ox, this.getY(), this.getView(), this);  }
+
+    public PositionPoint offsetView( int oview ) { return new PositionPoint(this.getX(), this.getY(), (short) (this.getView() + (short) oview), this); }

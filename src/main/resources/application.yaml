@@ -1,0 +1,4 @@
+spring:
+  database:
+    generate-unique-name: false
+    name: robotBase
