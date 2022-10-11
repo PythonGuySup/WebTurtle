@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MapSessionImp {
+public class MapSessionImp implements MapSession{
 
     private final MapDataRepository mapDataRepository;
 
