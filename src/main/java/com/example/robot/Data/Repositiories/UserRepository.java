@@ -1,8 +1,10 @@
 package com.example.robot.Data.Repositiories;
 
-import com.example.robot.Data.User;
+import com.example.robot.Data.UserData;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends CrudRepository<User, Long> {
-    User findByUsername(String username);
+@Repository
+public interface UserRepository extends CrudRepository<UserData, Long> {
+    UserData findByUsername(String username);
 }

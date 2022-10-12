@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/")
+@RequestMapping("/home")
 @SessionAttributes("coords")
 public class HomeController {
 
@@ -39,12 +39,12 @@ public class HomeController {
     @ModelAttribute("coords")
     public Coordinates coords() { return new Coordinates(); }
 
-    @GetMapping("/")
+    @GetMapping
     public String getCoords() {
         return "home";
     }
 
-    @PostMapping("/")
+    @PostMapping
     public String service(@ModelAttribute Coordinates coords) {
         log.info("{}", coords);
 

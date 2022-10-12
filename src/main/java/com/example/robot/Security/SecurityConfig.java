@@ -1,8 +1,5 @@
-package Security;
+package com.example.robot.Security;
 
-import com.example.robot.Data.Repositiories.UserRepository;
-import net.bytebuddy.utility.nullability.AlwaysNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,19 +16,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService; //!FIXME
+
+    private final UserDetailsServiceImp userDetailsService; //!FIXME
+
+    public SecurityConfig(UserDetailsServiceImp userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").access("hasRole('USER')")
-                .antMatchers(HttpMethod.POST, "/").hasRole("USER")
-                .anyRequest().permitAll()
+                .antMatchers("/home").access("hasRole('USER')")
+                .antMatchers(HttpMethod.POST, "/**").hasRole("USER")
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/home")
+
 
                 .and()
                 .logout()
@@ -49,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions()
                 .sameOrigin()
         ;
+        http.csrf().disable();
     }
     @Bean
     public PasswordEncoder encoder() {return new BCryptPasswordEncoder();}
@@ -58,5 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
+
+
+
 
 }

@@ -1,14 +1,14 @@
-package Security;
+package com.example.robot.Security;
 
 import com.example.robot.Data.Repositiories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.Registration;
-
+@Slf4j
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
@@ -25,7 +25,9 @@ public class RegistrationController {
 
     @PostMapping
     public String processRegistration(RegistrationForm form) {
+
         userRepository.save(form.toUser(passwordEncoder));
+        log.info(userRepository.findAll().toString());
         return "redirect:/login";
     }
 }
