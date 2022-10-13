@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/home").access("hasRole('USER')")
+                .antMatchers(HttpMethod.POST, "/register", "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/**").hasRole("USER")
                 .and()
                 .formLogin()
@@ -51,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .frameOptions()
                 .sameOrigin()
         ;
-        http.csrf().disable();
+        //http.csrf().disable();
     }
     @Bean
     public PasswordEncoder encoder() {return new BCryptPasswordEncoder();}
