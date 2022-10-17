@@ -1,4 +1,12 @@
 spring:
   database:
     generate-unique-name: false
-    name: robotBase
+    name: robot
+  data:
+    rest:
+      base-path: "/api"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks

@@ -1,8 +1,6 @@
 package com.example.robot.Services;
 
 import com.example.robot.Data.*;
-import com.example.robot.Data.Repositiories.MapDataRepository;
-import com.example.robot.Data.Repositiories.PositionPointDataRepository;
 import com.example.robot.Data.Repositiories.WalkerDataRepository;
 import com.example.robot.Logic.PathFinding;
 import com.example.robot.Logic.PathFindingImp;
@@ -14,21 +12,26 @@ import com.example.robot.Manager.WalkerSessionImp;
 import com.example.robot.utils.MapMaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
-@RequiredArgsConstructor
 @Slf4j
 @Component
 public final class WalkerServiceImp implements RobotService<WalkerCommands> { // immutable
 
     private Coordinates coords;
 
-    private final WalkerDataRepository walkerDataRepository;
+    private MapSessionImp mapSessionImp;
+    private WalkerSession session;
+    private WalkerDataRepository walkerDataRepository;
 
-    private final PositionPointDataRepository positionPointDataRepository;
-
-    private final MapDataRepository mapDataRepository;
+    @Autowired
+    public WalkerServiceImp(MapSessionImp mapSessionImp, WalkerSessionImp session, WalkerDataRepository walkerDataRepository) {
+        this.mapSessionImp = mapSessionImp;
+        this.session = session;
+        this.walkerDataRepository = walkerDataRepository;
+    }
 
     public void setCoords(Coordinates coords) {
         this.coords = coords;
@@ -36,7 +39,6 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
 
     @Override
     public void run() {
-        MapSessionImp mapSessionImp = new MapSessionImp(mapDataRepository, positionPointDataRepository);
         MapData map = new MapData(MapMaker.getMap(coords), coords.getX1() + 1, coords.getY1() + 1);
 
         Walker robot = new Walker();
@@ -45,7 +47,6 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         robot.setMapData(map);
         robot.getMapData().getRobots().add(robot);
 
-        WalkerSession session = new WalkerSessionImp(walkerDataRepository, positionPointDataRepository);
         PathFinding pathFinding = new PathFindingImp();
 
         log.info("Path to the goal:{}", pathFinding.FindPath(robot.getMapData().getSizeX(), robot.getMapData().getSizeY(), coords));

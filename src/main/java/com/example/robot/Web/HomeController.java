@@ -24,17 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @SessionAttributes("coords")
 public class HomeController {
 
-    private final WalkerDataRepository walkerDataRepository;
-    private final  PositionPointDataRepository positionPointDataRepository;
-
-    private final MapDataRepository mapDataRepository;
-
-    @Autowired
-    public HomeController(WalkerDataRepository walkerDataRepository, PositionPointDataRepository positionPointDataRepository, MapDataRepository mapDataRepository) {
-       this.positionPointDataRepository = positionPointDataRepository;
-       this.walkerDataRepository = walkerDataRepository;
-       this.mapDataRepository = mapDataRepository;
-    }
 
     @ModelAttribute("coords")
     public Coordinates coords() { return new Coordinates(); }
@@ -48,9 +37,9 @@ public class HomeController {
     public String service(@ModelAttribute Coordinates coords) {
         log.info("{}", coords);
 
-        RobotService<WalkerCommands> service = new WalkerServiceImp(walkerDataRepository, positionPointDataRepository, mapDataRepository);
-        service.setCoords(coords);
-        service.run();
+        //RobotService<WalkerCommands> service = new WalkerServiceImp();
+        //service.setCoords(coords);
+       // service.run();
         return "success";
 
     }

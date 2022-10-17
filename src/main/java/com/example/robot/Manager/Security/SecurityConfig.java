@@ -1,4 +1,4 @@
-package com.example.robot.Security;
+package com.example.robot.Manager.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/home").access("hasRole('USER')")
                 .antMatchers(HttpMethod.POST, "/register", "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/**").hasRole("USER")
+
+                //.antMatchers(HttpMethod.POST, "/api/UserDatas").hasAuthority("SCOPE_writeUserDatas")
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -51,8 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .frameOptions()
                 .sameOrigin()
+                //.and()
+                //.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
         ;
-        //http.csrf().disable();
+        http.csrf().disable();
     }
     @Bean
     public PasswordEncoder encoder() {return new BCryptPasswordEncoder();}

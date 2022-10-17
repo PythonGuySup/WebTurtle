@@ -1,4 +1,4 @@
-package com.example.robot.Security;
+package com.example.robot.Manager.Security;
 
 import com.example.robot.Data.UserData;
 import lombok.Data;
