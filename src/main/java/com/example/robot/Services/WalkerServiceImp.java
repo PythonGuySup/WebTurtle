@@ -33,12 +33,11 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         this.walkerDataRepository = walkerDataRepository;
     }
 
-    public void setCoords(Coordinates coords) {
-        this.coords = coords;
-    }
+
 
     @Override
-    public void run() {
+    public void run(Coordinates coords) {
+        this.coords = coords;
         MapData map = new MapData(MapMaker.getMap(coords), coords.getX1() + 1, coords.getY1() + 1);
 
         Walker robot = new Walker();
@@ -54,7 +53,7 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         log.info(robot.getPosition().toString());
 
         mapSessionImp.save(map);
-        robot.getReadyToSave();
+
         session.save(robot);
 
         log.warn("GETTING FROM DATABASE IN THE LOCAL MEMORY");

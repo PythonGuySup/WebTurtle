@@ -5,5 +5,4 @@ import com.example.robot.Data.Repositiories.PositionPointDataRepository;
 
 public interface Robot<CommandType> {
      void giveCommand(CommandType command, int repeat, int wait_ms);
-     void getReadyToSave();
 }

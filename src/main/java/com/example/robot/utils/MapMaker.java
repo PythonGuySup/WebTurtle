@@ -13,10 +13,8 @@ public class MapMaker {
         List<PositionPointData> map = new ArrayList<>();
         for (int i = 0; i <= coords.getX1() + 1; i++) {
             for (int j = 0; j <= coords.getY1() + 1; j++) {
-                PositionPointData data = new PositionPointData();
-                data.setX(i);
-                data.setY(j);
-                map.add(new PositionPointData());
+                PositionPointData data = new PositionPointData(i, j, (short) 0);
+                map.add(data);
             }
 
         }

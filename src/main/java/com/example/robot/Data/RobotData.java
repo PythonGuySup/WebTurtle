@@ -3,8 +3,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Data
@@ -14,31 +13,36 @@ import java.util.List;
 public abstract class RobotData<CommandType>  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ElementCollection
     @CollectionTable(name = "Path")
-    private List<PositionPointData> path = new ArrayList<>();
+    private Set<PositionPointData> path = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     MapData mapData;
-    @Transient
-    private PositionPoint positionPoint;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private PositionPointData positionPoint;
+   // @Transient
+    //private PositionPoint positionPoint;
 
 
 
 
     public void setPosition(Coordinates coords) {
-        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), (short) 0, null);
+        this.positionPoint = new PositionPointData(coords.getX0(), coords.getY0(), (short) 0);
     }
 
     public void setPosition(Coordinates coords, short view) {
-        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), view, null);
+        this.positionPoint = new PositionPointData(coords.getX0(), coords.getY0(), view);
+
     }
 
-    public void setPosition(PositionPoint positionPoint) {
-        this.positionPoint = positionPoint;
+
+    public void setPosition(PositionPointData positionPointData) {
+        this.positionPoint = positionPointData;
     }
 
 
@@ -48,7 +52,7 @@ public abstract class RobotData<CommandType>  {
     }
 
 
-    public PositionPoint getPosition() {
+    public PositionPointData getPosition() {
         return positionPoint;
     }
 

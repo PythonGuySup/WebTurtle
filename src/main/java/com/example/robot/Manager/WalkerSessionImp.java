@@ -27,8 +27,9 @@ public class WalkerSessionImp implements WalkerSession { //FIXME
         }
 
         log.warn("{}", robot.getPath());
-
+        //robot.getReadyToSave();
         positionPointDataRepository.saveAll(robot.getPath());
+        positionPointDataRepository.save(robot.getPosition());
         walkerDataRepository.save(robot);
 
     }
