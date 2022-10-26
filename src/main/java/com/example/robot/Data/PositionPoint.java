@@ -1,44 +1,58 @@
 package com.example.robot.Data;
 
-import lombok.*;
+import lombok.Data;
 
-import java.util.Objects;
+import javax.persistence.*;
 
 
-@Getter
-@RequiredArgsConstructor
-
+@Data
+@Entity
+@Embeddable
 public final class PositionPoint {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-    private final int x;
-    private final int y;
 
-    private final short view; //0-360
+    private int x;
+    private int y;
+    private short view;
 
-    private final PositionPoint previous;
+    @OneToOne
+    RobotData robotData;
 
-    @Override
-    public String toString() { return String.format("(%d, %d, %d) degrees", x, y, view); }
-
-    @Override
-    public boolean equals(Object o) {
-        PositionPoint positionPoint = (PositionPoint) o;
-
-        return x == positionPoint.getX() && y == positionPoint.getY();
+    public PositionPoint(int x, int y, short view) {
+        this.x = x;
+        this.y = y;
+        this.view = view;
     }
 
-    @Override
-    public int hashCode() { return Objects.hash(x, y); }
+    public PositionPoint(int x, int y, short view, RobotData robotData)  {
+        this.x = x;
+        this.y = y;
+        this.view = view;
+        this.robotData = null; //FIXME!
+    }
 
-    public PositionPoint offset(int ox, int oy) { return new PositionPoint(this.getX() + ox, this.getY() + oy, this.getView(), this); }
+    public PositionPoint(PositionPoint positionPointData) {
+        this.x = positionPointData.getX();
+        this.y = positionPointData.getY();
+        this.view = positionPointData.getView();
+    }
+    public PositionPoint() {
+    }
 
-    public PositionPoint offset(int ox, int oy, short changeView) { return new PositionPoint(this.getX() + ox, this.getY() + oy, (short) (this.getView() + changeView), this );  }
+    //@Override
+    //public String toString() { return String.format("(%d, %d, %d) degrees", x, y, view); }
+    public void offset(int ox, int oy) { this.setX(this.getX() + ox);  this.setY(this.getY() + oy); }
 
-    public PositionPoint offsetY(int oy) { return new PositionPoint(this.getX(), this.getY() + oy, this.getView(), this); }
+    public void offset(int ox, int oy, short oview) { this.setX(this.getX() + ox);  this.setY(this.getY() + oy); this.setView((short) (this.getView() + oview));  }
 
-    public PositionPoint offsetX(int ox) {  return new PositionPoint(this.getX() + ox, this.getY(), this.getView(), this); }
+    public void offsetY(int oy) { this.setY(this.getY() + oy); }
 
-    public PositionPoint offsetView( int oview ) { return new PositionPoint(this.getX(), this.getY(), (short) (this.getView() + oview), this.getPrevious() ); }
+    public void offsetX(int ox) { this.setX(this.getX() + ox); }
 
+    public void offsetView( int oview ) { this.setView((short) (this.getView() + oview)); }
 
 }

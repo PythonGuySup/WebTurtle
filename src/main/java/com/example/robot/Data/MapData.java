@@ -1,8 +1,6 @@
 package com.example.robot.Data;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class MapData {
 
     @ElementCollection
     @CollectionTable
-    private Collection<PositionPointData> map; // FIXME THIS ISN'T IMMUTABLE MAP
+    private Collection<PositionPoint> map; // FIXME THIS ISN'T IMMUTABLE MAP
 
     private int sizeX;
     private int sizeY;
@@ -29,7 +27,7 @@ public class MapData {
     List<RobotData> robots = new ArrayList<>();
 
 
-    public MapData(Collection<PositionPointData> map, int sizeX, int sizeY) {
+    public MapData(Collection<PositionPoint> map, int sizeX, int sizeY) {
         this.map = map;
         this.sizeX = sizeX;
         this.sizeY = sizeY;

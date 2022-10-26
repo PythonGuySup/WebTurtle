@@ -1,11 +1,7 @@
 package com.example.robot.Services;
 
-import com.example.robot.Data.PositionPoint;
-import com.example.robot.Data.PositionPointData;
 import com.example.robot.Data.Repositiories.WalkerDataRepository;
 import com.example.robot.Data.WalkerCommands;
-import com.example.robot.Data.WalkerDTO;
-import com.example.robot.Logic.Robot;
 import com.example.robot.Logic.Walker;
 import com.example.robot.Manager.WalkerSessionImp;
 import lombok.extern.slf4j.Slf4j;

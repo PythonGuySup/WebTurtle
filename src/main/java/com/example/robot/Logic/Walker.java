@@ -4,9 +4,6 @@ import com.example.robot.Data.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 
@@ -21,9 +18,9 @@ public class Walker extends RobotData<WalkerCommands> implements Robot<WalkerCom
         log.info(((this.getPosition() == null) ? "ERROR: Point IS NULL" : "Parsing the command...\t" + this.getPosition())); // FIXME! DELETE THIS!
 
         switch (command) {
-            case GO: this.getPath().add(new PositionPointData(this.getPosition())); moveToward(this.getPosition().getView()); break;
-            case LEFT: this.getPath().add(new PositionPointData(this.getPosition())); this.getPosition().offsetView(90); break;
-            case SEMICIRCLE: this.getPath().add(new PositionPointData(this.getPosition())); this.getPosition().offsetView(180); break;
+            case GO: this.getPath().add(new PositionPoint(this.getPosition())); moveToward(this.getPosition().getView()); break;
+            case LEFT: this.getPath().add(new PositionPoint(this.getPosition())); this.getPosition().offsetView(90); break;
+            case SEMICIRCLE: this.getPath().add(new PositionPoint(this.getPosition())); this.getPosition().offsetView(180); break;
             case SKIP: break;
             default: log.info("Command {} wasn't understand", command); break;
         }
