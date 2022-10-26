@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "robots")
 @Entity
 public class MapData {
     @Id
@@ -18,7 +19,7 @@ public class MapData {
 
     @ElementCollection
     @CollectionTable
-    private Collection<PositionPoint> map; // FIXME THIS ISN'T IMMUTABLE MAP
+    private Collection<CostPoint> map; // FIXME THIS ISN'T IMMUTABLE MAP
 
     private int sizeX;
     private int sizeY;
@@ -27,7 +28,7 @@ public class MapData {
     List<RobotData> robots = new ArrayList<>();
 
 
-    public MapData(Collection<PositionPoint> map, int sizeX, int sizeY) {
+    public MapData(Collection<CostPoint> map, int sizeX, int sizeY) {
         this.map = map;
         this.sizeX = sizeX;
         this.sizeY = sizeY;

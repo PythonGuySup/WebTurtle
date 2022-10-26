@@ -1,4 +1,5 @@
 package com.example.robot.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import java.util.*;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 @Table(name = "Robot")
 public abstract class RobotData<CommandType>  {
 
@@ -20,16 +22,15 @@ public abstract class RobotData<CommandType>  {
 
     @ElementCollection
     @CollectionTable(name = "Path")
+    @OrderColumn //FIXME Doesn't work
     private Set<PositionPoint> path = new LinkedHashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     MapData mapData;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private PositionPoint positionPoint;
-   // @Transient
-    //private PositionPoint positionPoint;
-
 
 
 

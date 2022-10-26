@@ -1,8 +1,8 @@
 package com.example.robot.Manager;
 
 import com.example.robot.Data.MapData;
+import com.example.robot.Data.Repositiories.CostPointRepository;
 import com.example.robot.Data.Repositiories.MapDataRepository;
-import com.example.robot.Data.Repositiories.PositionPointRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,9 +15,9 @@ public class MapSessionImp implements MapSession{
     private MapDataRepository mapDataRepository;
 
     @Autowired
-    private PositionPointRepository positionPointRepository;
+    private CostPointRepository costPointRepository;
     public void save(MapData mapData) {
-        positionPointRepository.saveAll(mapData.getMap());
+        costPointRepository.saveAll(mapData.getMap());
         mapDataRepository.save(mapData);
         log.info("Map saved");
     }

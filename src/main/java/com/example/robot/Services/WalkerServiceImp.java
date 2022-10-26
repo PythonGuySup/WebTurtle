@@ -2,22 +2,23 @@ package com.example.robot.Services;
 
 import com.example.robot.Data.*;
 import com.example.robot.Data.Mappers.WalkerMapper;
-import com.example.robot.Data.Repositiories.PositionPointRepository;
 import com.example.robot.Data.Repositiories.WalkerDataRepository;
+import com.example.robot.Logic.LinkedPoint;
 import com.example.robot.Logic.PathFinding;
 import com.example.robot.Logic.PathFindingImp;
 
 import com.example.robot.Logic.Walker;
 import com.example.robot.Manager.MapSessionImp;
-import com.example.robot.Manager.WalkerSession;
 import com.example.robot.Manager.WalkerSessionImp;
 import com.example.robot.utils.MapMaker;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -52,7 +53,8 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         mapSessionImp.save(map);
         walkerSessionImp.save(walker);
         log.info("Set robot with id: {}", walker.getId());
-        log.info(walker.getPosition().toString());
+        log.info("{}", walker.getPosition());
+        log.info(walkerMapper.toWalkerDTO(walker).toString());
 
         return walkerMapper.toWalkerDTO(walker);
     }
@@ -65,12 +67,19 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         walkerSessionImp.save(walker);
         log.info("Robot {}: path {}", walker.getId(), walker.getPath().toString());
         log.info(walker.getPosition().toString());
+        walker.setPath(walker.getPath().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new))); //FIXME
         return walkerMapper.toWalkerDTO(walker);
     }
 
     @Override
-    public WalkerDTO goToGoal(int x, int y) {
-        return null;
+    public WalkerDTO goToGoal(long id, int x, int y) {
+        Walker walker = walkerDataRepository.findById(id).get();
+        walker.setPath(walker.getPath().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new))); //FIXME
+        AchievementGoal achievementGoal = new AchievementGoal(walker);
+        achievementGoal.achieve(new Coordinates(walker.getPosition().getX(), walker.getPosition().getY(), x, y));
+        walkerSessionImp.save(walker);
+        walker.setPath(walker.getPath().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new))); //FIXME
+        return walkerMapper.toWalkerDTO(walker);
     }
 
     @AllArgsConstructor

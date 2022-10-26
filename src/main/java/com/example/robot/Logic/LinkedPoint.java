@@ -1,4 +1,4 @@
-package com.example.robot.Data;
+package com.example.robot.Logic;
 
 import lombok.*;
 

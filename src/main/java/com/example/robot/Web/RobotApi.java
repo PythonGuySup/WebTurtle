@@ -3,11 +3,8 @@ package com.example.robot.Web;
 
 import com.example.robot.Data.Coordinates;
 import com.example.robot.Data.MapData;
-import com.example.robot.Data.Mappers.WalkerMapper;
 import com.example.robot.Data.Repositiories.MapDataRepository;
 import com.example.robot.Data.WalkerDTO;
-import com.example.robot.Logic.Walker;
-import com.example.robot.Services.WalkerServiceExpImp;
 import com.example.robot.Services.WalkerServiceImp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +34,6 @@ public class RobotApi {
         return mapDataRepository.findById(id).get();
     }
 
-    @PatchMapping(path = "/service", consumes = "application/json") // In this case we're creating all entities even they already exist.
-    public void walk(@RequestBody Coordinates coords) {
-
-    }
+    @PatchMapping(path = "{id}/service", consumes = "application/json") // In this case we're creating all entities even they already exist.
+    public WalkerDTO walk(@RequestBody Coordinates coords, @PathVariable long id) {return walkerServiceImp.goToGoal(id, coords.getX1(), coords.getY1());}
 }
