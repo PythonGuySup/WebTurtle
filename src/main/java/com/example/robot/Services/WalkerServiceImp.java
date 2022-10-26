@@ -40,15 +40,7 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
     private WalkerDataRepository walkerDataRepository;
 
 
-    @Override
-    public WalkerDTO initialize(Coordinates coords) {
-        Walker robot = this.create(coords);
-        return walkerMapper.toWalkerDTO(robot);
-
-    }
-
-
-    public Walker create(Coordinates coords) {
+    public WalkerDTO create(Coordinates coords) {
 
         Walker walker = new Walker();
         MapData map = new MapData(MapMaker.getMap(coords), coords.getX1() + 1, coords.getY1() + 1);
@@ -62,18 +54,23 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
         log.info("Set robot with id: {}", walker.getId());
         log.info(walker.getPosition().toString());
 
-        return walker;
+        return walkerMapper.toWalkerDTO(walker);
     }
 
     @Override
     public WalkerDTO implementCommand(long id, String command) {
         Walker walker = walkerDataRepository.findById(id).get();
-        walker.giveCommand(WalkerCommands.valueOf(command), 0 ,0);
+        walker.giveCommand(WalkerCommands.valueOf(command.toUpperCase()), 0 ,0);
         //FIX THIS YOU SHOULDN'T FLUSH BY YOUR SELF
         walkerSessionImp.save(walker);
         log.info("Robot {}: path {}", walker.getId(), walker.getPath().toString());
         log.info(walker.getPosition().toString());
         return walkerMapper.toWalkerDTO(walker);
+    }
+
+    @Override
+    public WalkerDTO goToGoal(int x, int y) {
+        return null;
     }
 
     @AllArgsConstructor

@@ -5,9 +5,11 @@ import com.example.robot.Data.Coordinates;
 import com.example.robot.Data.WalkerDTO;
 
 public interface RobotService<CommandType> {
-    WalkerDTO initialize(Coordinates coords);
+    WalkerDTO create(Coordinates coords);
 
     WalkerDTO implementCommand(long id, String command);
+
+    WalkerDTO goToGoal(int x, int y);
 
 
 }
