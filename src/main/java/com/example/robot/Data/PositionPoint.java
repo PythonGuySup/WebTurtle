@@ -1,44 +1,66 @@
 package com.example.robot.Data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Objects;
+import javax.persistence.*;
 
 
-@Getter
-@RequiredArgsConstructor
+@Slf4j
+@Data
+@Entity
+@EqualsAndHashCode(exclude = "robotData", callSuper = true)
+@ToString(exclude = "robotData", callSuper = true)
+@Embeddable
+public class PositionPoint extends Point implements Comparable<PositionPoint> {
 
-public final class PositionPoint {
+    @OneToOne
+    @JsonBackReference
+    RobotData robotData;
 
-    private final int x;
-    private final int y;
-
-    private final short view; //0-360
-
-    private final PositionPoint previous;
-
-    @Override
-    public String toString() { return String.format("(%d, %d, %d) degrees", x, y, view); }
-
-    @Override
-    public boolean equals(Object o) {
-        PositionPoint positionPoint = (PositionPoint) o;
-
-        return x == positionPoint.getX() && y == positionPoint.getY();
+    public PositionPoint(int x, int y, short view) {
+        super(x, y, view);
     }
 
+    public PositionPoint(int x, int y, short view, RobotData robotData)  {
+        super(x, y, view);
+        this.robotData = robotData; //FIXME!
+    }
+
+    public PositionPoint(PositionPoint positionPointData) {
+        super(positionPointData.getX(), positionPointData.getY(), positionPointData.getView());
+        this.robotData = positionPointData.getRobotData();
+    }
+    public PositionPoint() {
+        super();
+    }
+
+    public void offset(int ox, int oy) { this.setX(this.getX() + ox);  this.setY(this.getY() + oy); }
+
+    public void offset(int ox, int oy, short oview) { this.setX(this.getX() + ox);  this.setY(this.getY() + oy); this.setView((short) (this.getView() + oview));  }
+
+    public void offsetY(int oy) { this.setY(this.getY() + oy); }
+
+    public void offsetX(int ox) { this.setX(this.getX() + ox); }
+
+    public void offsetView( int oview ) { this.setView((short) (this.getView() + oview)); }
+
     @Override
-    public int hashCode() { return Objects.hash(x, y); }
-
-    public PositionPoint offset(int ox, int oy) { return new PositionPoint(this.getX() + ox, this.getY() + oy, this.getView(), this); }
-
-    public PositionPoint offset(int ox, int oy, short changeView) { return new PositionPoint(this.getX() + ox, this.getY() + oy, (short) (this.getView() + changeView), this );  }
-
-    public PositionPoint offsetY(int oy) { return new PositionPoint(this.getX(), this.getY() + oy, this.getView(), this); }
-
-    public PositionPoint offsetX(int ox) {  return new PositionPoint(this.getX() + ox, this.getY(), this.getView(), this); }
-
-    public PositionPoint offsetView( int oview ) { return new PositionPoint(this.getX(), this.getY(), (short) (this.getView() + oview), this.getPrevious() ); }
-
-
+    public int compareTo(PositionPoint obj) {
+        if ( obj == null) {
+            log.error("Compare to NULL {}", obj);
+            throw new NullPointerException();
+        }
+         else if (this.getId() == obj.getId()) {
+            return 0;
+        }
+         else if (this.getId() < obj.getId()) {
+            return -1;
+        } else if (this.getId() > obj.getId()) {
+            return 1;
+        }
+         log.error("Can't compare {}", obj);
+         return -1;
+    }
 }

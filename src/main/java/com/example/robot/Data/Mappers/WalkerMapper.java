@@ -17,6 +17,8 @@ public interface WalkerMapper {
     @Mapping(target = "mapId", source = "walker.mapData.id")
     @Mapping(target = "robotType", constant = "WALKER")
     @Mapping(target = "positionPoint", source = "walker.positionPoint")
+    @Mapping(target = "map", source = "walker.mapData.map")
+    @Mapping(target = "path", source = "walker.path" )
     WalkerDTO toWalkerDTO(Walker walker);
 
 }
