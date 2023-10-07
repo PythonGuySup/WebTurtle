@@ -26,7 +26,7 @@ public class MapData {
     private int sizeY;
 
     @OneToMany(cascade = CascadeType.ALL)
-    List<RobotData> robots = new ArrayList<>();
+    List<RobotData> robots = new ArrayList<>(); //2 разные мапы могут ссылаться на одинакового робота
 
 
     public MapData(Collection<PositionPointData> map, int sizeX, int sizeY) {

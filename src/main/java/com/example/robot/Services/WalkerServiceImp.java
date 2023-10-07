@@ -14,6 +14,7 @@ import com.example.robot.Manager.WalkerSessionImp;
 import com.example.robot.utils.MapMaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -36,7 +37,7 @@ public final class WalkerServiceImp implements RobotService<WalkerCommands> { //
 
     @Override
     public void run() {
-        MapSessionImp mapSessionImp = new MapSessionImp(mapDataRepository, positionPointDataRepository);
+        MapSessionImp mapSessionImp = new MapSessionImp(mapDataRepository, positionPointDataRepository); //FIXME
         MapData map = new MapData(MapMaker.getMap(coords), coords.getX1() + 1, coords.getY1() + 1);
 
         Walker robot = new Walker();
