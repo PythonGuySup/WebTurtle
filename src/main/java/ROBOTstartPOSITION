@@ -12,3 +12,46 @@ public PositionPoint offset(int ox, int oy, short changeView) { return new Posit
     public PositionPoint offsetX(int ox) { return new PositionPoint(this.getX() + ox, this.getY(), this.getView(), this);  }
 
     public PositionPoint offsetView( int oview ) { return new PositionPoint(this.getX(), this.getY(), (short) (this.getView() + (short) oview), this); }
+
+
+
+
+
+
+
+    public void getReadyToSave() {
+            try {
+                this.flushPathPull();
+            } catch (Exception exception) {
+                log.error("ERROR WHILE: Flush  PathPull to Path column : ", exception);
+
+            }
+
+        }
+        private void flushPathPull() {
+           List<PositionPoint> path = this.getPathByPoint(this.getPositionPoint(), new ArrayList<PositionPoint>());
+           log.info("flushPathPull: path is {}", path);
+
+           for (PositionPoint point : path) {
+               if (point != null) {
+                   PositionPointData data = new PositionPointData();
+                   data.setX(point.getX());
+                   data.setY(point.getY());
+                   data.setView(point.getView());
+                   this.getPath().add(data);
+               }
+           }
+        }
+
+        private List<PositionPoint> getPathByPoint(PositionPoint point, List<PositionPoint> path) {
+
+            if (point == null || point.getPrevious() == null) {
+                log.warn("HERE: {}", point);
+                path.add(point);
+                Collections.reverse(path);
+                return path;
+            } else {
+                path.add(point);
+                return this.getPathByPoint(point.getPrevious(), path);
+            }
+        }

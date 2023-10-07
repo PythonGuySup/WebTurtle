@@ -1,41 +1,48 @@
 package com.example.robot.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
 @Table(name = "Robot")
 public abstract class RobotData<CommandType>  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ElementCollection
     @CollectionTable(name = "Path")
-    private List<PositionPointData> path = new ArrayList<>();
+    @OrderColumn //FIXME Doesn't work
+    private Set<PositionPoint> path = new LinkedHashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     MapData mapData;
-    @Transient
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private PositionPoint positionPoint;
 
 
 
-
     public void setPosition(Coordinates coords) {
-        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), (short) 0, null);
+        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), (short) 0, this);
     }
 
     public void setPosition(Coordinates coords, short view) {
-        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), view, null);
+        this.positionPoint = new PositionPoint(coords.getX0(), coords.getY0(), view, this);
+
     }
+
 
     public void setPosition(PositionPoint positionPoint) {
         this.positionPoint = positionPoint;

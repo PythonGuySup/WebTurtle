@@ -1,21 +1,22 @@
 package com.example.robot.Manager;
 
-import com.example.robot.Data.Repositiories.PositionPointDataRepository;
+import com.example.robot.Data.Repositiories.PositionPointRepository;
 import com.example.robot.Data.Repositiories.WalkerDataRepository;
 import com.example.robot.Logic.Walker;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class WalkerSessionImp implements WalkerSession { //FIXME
 
-    private final WalkerDataRepository walkerDataRepository;
+    @Autowired
+    private WalkerDataRepository walkerDataRepository;
 
-    private final  PositionPointDataRepository positionPointDataRepository;
+    @Autowired
+    private PositionPointRepository positionPointRepository;
 
 
     @Override
@@ -25,8 +26,9 @@ public class WalkerSessionImp implements WalkerSession { //FIXME
         }
 
         log.warn("{}", robot.getPath());
-
-        positionPointDataRepository.saveAll(robot.getPath());
+        //robot.getReadyToSave();
+        positionPointRepository.saveAll(robot.getPath());
+        positionPointRepository.save(robot.getPosition());
         walkerDataRepository.save(robot);
 
     }

@@ -1,0 +1,29 @@
+
+//SERVICES
+3 end point: robot walks from his position to goal's position (x0, y0 -> x1, y1)
+
+// END POINTS
+1. POST :8080/api/robots JSON
+2. PATCH :8080/api/robots/{ID}/{COMMAND} NULL
+3. PATCH :8080/api/robots/{ID}/service JSON
+4. GET :8080/api/robots/map/{ID} NULL
+
+2. json-type
+{
+    "x0":1, // where is robot
+    "y0":1, // where is robot
+    "x1":9, // size of map :D yea, know...
+    "y1":9 // size of map
+}
+
+3. json-type
+{
+   "x0":1, // no meaning
+   "y0":1, // also no meaning
+   "x1":9, //  goal coords
+   "y1":9 // also goal coords
+}
+
+//INSTRUCTION
+You must create robot at first: 1 end-point.
+After you can use 2, 3, 4 end points
